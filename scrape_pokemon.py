@@ -10,10 +10,17 @@ print('Status Code: ' + str(page.status_code))
 soup = BeautifulSoup(page.content, 'lxml')
 
 #Getting Pokemon Name
-div_name = soup.find_all('div', {'class' : 'pokedex-pokemon-pagination-title'})
+div_name = soup.find('div', {'class' : 'pokedex-pokemon-pagination-title'})
 print(div_name)
 
-test = BeautifulSoup(str(div_name),'lxml')
-print(test)
-#tag = test.find_all('div')
-#print(tag.string)
+name = div_name.text.strip()
+name = name.replace(" ","")
+name_number = name.split("\n")
+print(name_number)
+
+#Getting Pokemon Type
+div_type = soup.find('div', {'class' : 'dtm-type'})
+types = div_type.text
+types = types.split("\n")
+types = list(filter(None, types))
+print(types)
