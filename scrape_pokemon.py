@@ -4,15 +4,30 @@ from bs4 import BeautifulSoup
 
 
 def main():
-    print("Initalise Request")
-    result = request_result("https://www.pokemon.com/us/pokedex/bulbasaur")
+    print("Initialise Request")
+    result = request_result("https://www.pokemon.com/us/pokedex/")
 
     if result[0] == 200:
         print("Extracting Data")
         # Getting Pokemon Information
         soup = BeautifulSoup(result[1], 'lxml')
-        pokemonlist = extract_pokemon_data(soup)
-        print(pokemonlist)
+        #pokemon_urls = soup.find('section', {'class' : 'section pokedex-results overflow-visible'})
+        pokemon_urls = []
+        links = []
+        li = soup.find_all('li')
+
+        for i in range(len(li)):
+            a = li[i].find('a')
+            if a is not None and 'href' in a.attrs:
+                link = li[i].find('a').attrs['href']
+                links.append(link)
+
+        for link in links:
+            if link.find('pokedex') >= 0:
+                pokemon_urls.append(link)
+
+        print(pokemon_urls)
+        print(len(pokemon_urls))
 
     else:
         print("Error Status Code: " + str(result[0]))
